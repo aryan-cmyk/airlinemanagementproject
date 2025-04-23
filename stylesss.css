@@ -1,0 +1,50 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-image: url('background.jpg'); /* Replace 'background.jpg' with your image path */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: white;
+  }
+  
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  header {
+    text-align: center;
+    margin-bottom: 50px;
+  }
+  
+  .passenger-details,
+  .flight-details {
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 20px;
+    margin-bottom: 30px;
+    border-radius: 10px;
+  }
+  
+  .passenger-details h2,
+  .flight-details h2 {
+    color: #FF5733; /* Orange color */
+  }
+  
+  .passenger-details p,
+  .flight-details p {
+    color: #FFD700; /* Yellow color */
+  }
+  
+  /* Styling for links */
+  a {
+    color: #00FF00; /* Green color */
+    text-decoration: none;
+  }
+  
+  a:hover {
+    color: #FFD700; /* Yellow color */
+  }
+  

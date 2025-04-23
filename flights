@@ -1,0 +1,11 @@
+<script>start("c:\\Users\\lenovo\\Documents\\airline management\\airline_backend\\flights\\");</script>
+<script>onHasParentDirectory();</script>
+<script>addRow("__pycache__","__pycache__",1,0,"0 B",1738753211,"2/5/25, 4:30:11 PM");</script>
+<script>addRow("migrations","migrations",1,0,"0 B",1738747227,"2/5/25, 2:50:27 PM");</script>
+<script>addRow("__init__.py","__init__.py",0,0,"0 B",1737380028,"1/20/25, 7:03:48 PM");</script>
+<script>addRow("admin.py","admin.py",0,66,"66 B",1737380028,"1/20/25, 7:03:48 PM");</script>
+<script>addRow("apps.py","apps.py",0,152,"152 B",1737380028,"1/20/25, 7:03:48 PM");</script>
+<script>addRow("models.py","models.py",0,3037,"3.0 kB",1738747219,"2/5/25, 2:50:19 PM");</script>
+<script>addRow("tests.py","tests.py",0,63,"63 B",1737380028,"1/20/25, 7:03:48 PM");</script>
+<script>addRow("urls.py","urls.py",0,0,"0 B",1738754222,"2/5/25, 4:47:02 PM");</script>
+<script>addRow("views.py","views.py",0,1510,"1.5 kB",1738753086,"2/5/25, 4:28:06 PM");</script>
