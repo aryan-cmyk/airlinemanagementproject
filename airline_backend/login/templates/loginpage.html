@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Airline-X</title>
+
+  <!-- Bootstrap + Icons + Fonts -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Kode+Mono:wght@400..700&display=swap" rel="stylesheet">
+
+  <!-- Custom Styling -->
+  <style>
+    body {
+      font-family: 'Kode Mono', monospace;
+      background-image: url('backgroundwrapp.jpg');  /* Use same bg as others */
+      background-size: cover;
+      background-position: center;
+      color: white;
+    }
+
+    .login-container {
+      width: 400px;
+      margin: 100px auto;
+      padding: 30px;
+      background-color: rgba(0, 0, 0, 0.75);
+      border-radius: 10px;
+      box-shadow: 0px 0px 10px 2px #5cb85c;
+    }
+
+    .login-container h2 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .input-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+    }
+
+    button[type="submit"] {
+      width: 100%;
+      padding: 10px;
+      background-color: #5cb85c;
+      border: none;
+      border-radius: 5px;
+      color: white;
+      font-weight: bold;
+    }
+
+    .description {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 14px;
+      color: #dcdcdc;
+    }
+
+    button:hover {
+      background-color: #4cae4c;
+    }
+
+    @media screen and (max-width: 500px) {
+      .login-container {
+        width: 90%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="login-container">
+    <h2><i class="fa fa-plane"></i> Airline-X Login</h2>
+    <form id="login-form">
+      <div class="input-group">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
+      </div>
+      <div class="input-group">
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+      </div>
+      <button type="submit">Login</button>
+    </form>
+  </div>
+
+  <div class="description">
+    <p>Manage flight schedules, bookings, crew assignments and more with Airline-X.</p>
+  </div>
+
+  <script>
+    document.getElementById('login-form').addEventListener('submit', async function (event) {
+      event.preventDefault();
+
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+
+      try {
+        const response = await fetch("/login/", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username, password })
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.message === "Login successful!") {
+          alert(data.message);
+          window.location.href = "/homepage/";
+        } else {
+          alert(data.error || "Login failed. Please try again.");
+        }
+      } catch (error) {
+        console.error("Login error:", error);
+        alert("An unexpected error occurred. Please try again.");
+      }
+    });
+  </script>
+</body>
+</html>

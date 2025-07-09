@@ -1,0 +1,75 @@
+<!-- Save as crew.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Add Crew</title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="trial.css"> <!-- Existing styling -->
+</head>
+<body style="background-image: url('backgroundwrapp.jpg'); background-size: cover; color: white;">
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="homepage.html">Airline-X</a>
+      </div>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="assigncrew.html"><i class="fa fa-plus"></i> Assign Crew</a></li>
+        <li><a href="viewschedule.html"><i class="fa fa-calendar"></i> View Schedule</a></li>
+        <li><a href="loginpage.html"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container" style="margin-top: 80px;">
+    <h2>Add New Crew Member</h2>
+    <form id="crewForm">
+      <div class="form-group">
+        <label>Name:</label>
+        <input type="text" class="form-control" id="crewName" required>
+      </div>
+      <div class="form-group">
+        <label>Crew ID:</label>
+        <input type="text" class="form-control" id="crewId" required>
+      </div>
+      <div class="form-group">
+        <label>Role:</label>
+        <select class="form-control" id="crewRole">
+          <option>Pilot</option>
+          <option>Co-Pilot</option>
+          <option>Flight Attendant</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Experience (years):</label>
+        <input type="number" class="form-control" id="experience" min="0">
+      </div>
+      <div class="form-group">
+        <label>Available Days:</label>
+        <input type="text" class="form-control" id="availableDays" placeholder="e.g., Monday, Wednesday">
+      </div>
+      <button type="submit" class="btn btn-primary">Add Crew</button>
+    </form>
+  </div>
+
+ <script>
+  document.getElementById("crewForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+    const crew = {
+      crew_id: document.getElementById("crewId").value,
+      name: document.getElementById("crewName").value,
+      role: document.getElementById("crewRole").value,
+      experience: document.getElementById("experience").value,
+      available_days: document.getElementById("availableDays").value,
+    };
+    let crews = JSON.parse(localStorage.getItem("crews")) || [];
+    crews.push(crew);
+    localStorage.setItem("crews", JSON.stringify(crews));
+    alert("Crew member added!");
+    this.reset();
+  });
+</script>
+
+</body>
+</html>

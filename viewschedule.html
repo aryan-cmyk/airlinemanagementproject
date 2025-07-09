@@ -1,0 +1,47 @@
+<!-- viewschedule.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Crew Schedule</title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="trial.css">
+</head>
+<body style="background-image: url('bgimage.jpg'); background-size: cover; color: rgb(22, 1, 1);">
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="homepage.html">Airline-X</a>
+      </div>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="crew.html"><i class="fa fa-user-plus"></i> Add Crew</a></li>
+        <li><a href="assigncrew.html"><i class="fa fa-plus"></i> Assign Crew</a></li>
+        <li><a href="loginpage.html"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container" style="margin-top: 80px;">
+    <h2>Crew Schedule</h2>
+    <div class="form-group">
+      <label>Select Date:</label>
+      <input type="date" class="form-control" id="schedule_date">
+    </div>
+    <br>
+    <table class="table table-bordered table-hover">
+      <thead>
+        <tr>
+          <th>Crew ID</th>
+          <th>Name</th>
+          <th>Role</th>
+          <th>Flight No</th>
+        </tr>
+      </thead>
+      <tbody id="scheduleTable"></tbody>
+    </table>
+  </div>
+
+  <script src="crew.js"></script>
+</body>
+</html>
