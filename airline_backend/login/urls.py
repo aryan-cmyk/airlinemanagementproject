@@ -1,4 +1,5 @@
 from django.urls import path
+from . import views
 from .views import (
     login_view,
     home_view,
@@ -35,6 +36,10 @@ urlpatterns = [
     path('logout/', logout_view, name='logout'),
     path('createaccount/', create_account_view, name='createaccount'),
     path('passwordreset/', password_reset_view, name='passwordreset'),
-
-
+    path('accounts/delete/<int:user_id>/', views.delete_account, name='delete_account'),
+    path('accounts/edit/<int:user_id>/', views.edit_account, name='edit_account'),
 ]
+
+
+
+

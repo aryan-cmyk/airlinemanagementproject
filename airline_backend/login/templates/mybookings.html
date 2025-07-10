@@ -27,9 +27,20 @@
       border: none;
       padding: 6px 10px;
       border-radius: 4px;
+      margin-right: 5px;
     }
     .btn-download:hover {
       background-color: #4cae4c;
+    }
+    .btn-delete {
+      background-color: #d9534f;
+      color: white;
+      border: none;
+      padding: 6px 10px;
+      border-radius: 4px;
+    }
+    .btn-delete:hover {
+      background-color: #c9302c;
     }
   </style>
 </head>
@@ -71,7 +82,7 @@
     </table>
   </div>
 
-  <!-- Script to Load Bookings -->
+  <!-- JS Scripts -->
   <script>
     function generatePDF(booking, index) {
       const content = `
@@ -91,9 +102,19 @@
       link.click();
     }
 
-    document.addEventListener("DOMContentLoaded", function () {
+    function deleteBooking(index) {
+      const bookings = JSON.parse(localStorage.getItem("bookings")) || [];
+      if (index >= 0 && index < bookings.length) {
+        bookings.splice(index, 1);
+        localStorage.setItem("bookings", JSON.stringify(bookings));
+        loadBookings(); // refresh table
+      }
+    }
+
+    function loadBookings() {
       const bookings = JSON.parse(localStorage.getItem("bookings")) || [];
       const table = document.getElementById("bookingTable");
+      table.innerHTML = "";
 
       bookings.forEach((b, i) => {
         const row = `
@@ -109,12 +130,17 @@
               <button class="btn-download" onclick='generatePDF(${JSON.stringify(b)}, ${i})'>
                 <i class="fa fa-download"></i> Download
               </button>
+              <button class="btn-delete" onclick='deleteBooking(${i})'>
+                <i class="fa fa-trash"></i> Delete
+              </button>
             </td>
           </tr>
         `;
         table.innerHTML += row;
       });
-    });
+    }
+
+    document.addEventListener("DOMContentLoaded", loadBookings);
   </script>
 </body>
 </html>

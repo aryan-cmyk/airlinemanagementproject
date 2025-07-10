@@ -2,61 +2,144 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-    <title>Accounts</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="{% static 'myjs.js' %}"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Poppins">
-    <link rel="stylesheet" href="{% static 'trial.css' %}">
+  <title>Accounts</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap & jQuery -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+  <!-- Icons and Custom CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="{% static 'trial.css' %}">
+
+  <style>
+    body {
+      background-color: #1a1a1a;
+      color: white;
+      font-family: 'Poppins', sans-serif;
+    }
+    label {
+      color: white;
+    }
+    .form-control {
+      color: black;
+    }
+    .panel {
+      background-color: #2a2a2a;
+      border: 1px solid #444;
+    }
+    .table {
+      width: 100%;
+    }
+    .table th {
+      background-color: #333;
+      color: white;
+      text-align: center;
+    }
+    .table-striped tbody tr:nth-of-type(odd) {
+      background-color: #444;
+    }
+    .table-striped tbody tr:nth-of-type(even) {
+      background-color: #f9f9f9;
+      color: black;
+    }
+    .btn-xs {
+      padding: 3px 8px;
+      font-size: 12px;
+    }
+  </style>
 </head>
 
-<style type="text/css">
-    .affix {
-        top: 5rem;
-    }
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="{% url 'home' %}">Airline-X</a>
+      </div>
+      <ul class="nav navbar-nav navbar-right" style="padding-right: 2rem;">
+        <li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+      </ul>
+    </div>
+  </nav>
 
-    body {
-        position: relative;
-    }
-</style>
+  <!-- Main Container -->
+  <div class="container" style="margin-top: 100px;">
+    <div class="row">
 
-<body data-spy="scroll" data-target="#myscroll">
-
-    <nav class="navbar navbar-inverse" data-spy="affix" style="border-radius:0px !important; margin:0;border: 0 ; width: 100%;top:0;z-index: 9999 !important">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="{% url 'home' %}">Airline-X</a>
+      <!-- Create Account Form -->
+      <div class="col-md-6">
+        <div class="panel panel-default">
+          <div class="panel-heading"><h3>Create New Account</h3></div>
+          <div class="panel-body">
+            <form method="POST" action="{% url 'accounts' %}">
+              {% csrf_token %}
+              <div class="form-group">
+                <label>Username</label>
+                <input type="text" class="form-control" name="username" required>
+              </div>
+              <div class="form-group">
+                <label>Email</label>
+                <input type="email" class="form-control" name="email" required>
+              </div>
+              <div class="form-group">
+                <label>Password</label>
+                <input type="password" class="form-control" name="password" required>
+              </div>
+              <div class="form-group">
+                <label>Title (Role)</label>
+                <select name="title" class="form-control" required>
+                  <option value="admin">Admin</option>
+                  <option value="employee">Employee</option>
+                  <option value="crew">Crew</option>
+                </select>
+              </div>
+              <button type="submit" class="btn btn-success btn-block">Create Account</button>
+            </form>
+          </div>
         </div>
-        <div class="nav navbar-nav navbar-right">
-            <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-user"></span>
-                    <span class="caret"></span></a>
-                <ul class="dropdown-menu" style="padding: 1rem 2rem 1rem 2rem; text-align: center;">
-                    <li><a href="#"><b>Admin Name</b></a></li>
-                    <hr>
-                    <li><a href="#">View Profile</a></li>
-                    <li><a href="#">Settings</a></li>
-                    <hr>
-                    <li><a href="#">Logout</a></li>
-                </ul>
-            </li>
-            <ul class="nav navbar-nav navbar-right" style="padding: 0 3rem 0 0">
-                <li><a href="{% url 'home' %}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
-            </ul>
+      </div>
+
+      <!-- Existing Accounts Table -->
+      <div class="col-md-6">
+        <div class="panel panel-default">
+          <div class="panel-heading"><h3>All Registered Accounts</h3></div>
+          <div class="panel-body">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Username</th>
+                  <th>Email</th>
+                  <th>Title</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for account in accounts %}
+                  <tr>
+                    <td>{{ account.user.username }}</td>
+                    <td>{{ account.user.email }}</td>
+                    <td>{{ account.title|title }}</td>
+                    <td>
+                      <a href="{% url 'edit_account' account.user.id %}" class="btn btn-info btn-xs">Edit</a>
+                      <a href="{% url 'delete_account' account.user.id %}" class="btn btn-danger btn-xs" onclick="return confirm('Are you sure you want to delete this account?');">Delete</a>
+                    </td>
+                  </tr>
+                {% empty %}
+                  <tr>
+                    <td colspan="4">No accounts found.</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
         </div>
-    </nav>
+      </div>
 
-    <!-- (Rest of the content remains unchanged — only change static references if any more appear) -->
-
-    <script type="text/javascript">
-        $("#m1").click({ param1: "#sub1", param2: "#sub2", param3: "#sub3", param4: "#sub4" }, navbar_movment);
-        $("#m2").click({ param1: "#sub2", param2: "#sub1", param3: "#sub3", param4: "#sub4" }, navbar_movment);
-        $("#m3").click({ param1: "#sub3", param2: "#sub1", param3: "#sub2", param4: "#sub4" }, navbar_movment);
-        $("#m4").click({ param1: "#sub4", param2: "#sub1", param3: "#sub2", param4: "#sub3" }, navbar_movment);
-    </script>
+    </div>
+  </div>
 </body>
 </html>

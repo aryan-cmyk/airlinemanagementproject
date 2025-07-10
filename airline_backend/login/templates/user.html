@@ -9,19 +9,21 @@
     <!-- Bootstrap & FontAwesome -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
-    <!-- jQuery + Bootstrap JS -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
-    <!-- Fonts & Custom CSS -->
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Poppins">
     <link rel="stylesheet" href="{% static 'trial.css' %}">
-    <script src="{% static 'myjs.js' %}"></script>
+
+    <style>
+        body {
+            background-color: #1a1a1a;
+            color: white;
+        }
+        .table th, .table td {
+            color: #1a1a1a;
+        }
+    </style>
 </head>
 
-<body style="background-color: #1a1a1a; color: white;">
-
+<body>
 <!-- Navbar -->
 <nav class="navbar navbar-inverse" style="margin-bottom: 0; border-radius: 0;">
     <div class="container-fluid">
@@ -29,17 +31,6 @@
             <a class="navbar-brand" href="{% url 'home' %}">Airline-X</a>
         </div>
         <ul class="nav navbar-nav navbar-right">
-            <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-user"></span> <span class="caret"></span></a>
-                <ul class="dropdown-menu" style="padding: 1rem 2rem; text-align: center;">
-                    <li><a href="#"><b>Admin Name</b></a></li>
-                    <hr>
-                    <li><a href="#">View Profile</a></li>
-                    <li><a href="#">Settings</a></li>
-                    <hr>
-                    <li><a href="{% url 'logout' %}">Logout</a></li>
-                </ul>
-            </li>
             <li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
         </ul>
     </div>
@@ -67,20 +58,38 @@
         <table class="table table-striped table-hover">
             <thead>
                 <tr>
-                    <th style="color: rgb(237, 231, 231);">#</th>
-                    <th style="color: rgb(223, 217, 217);">ID</th>
-                    <th style="color: rgb(243, 234, 234);">First Name</th>
-                    <th style="color: rgb(229, 218, 218);">Last Name</th>
-                    <th style="color: rgb(228, 219, 219);">Phone</th>
-                    <th style="color: rgb(234, 227, 227);">Email</th>
-                    <th style="color: rgb(222, 215, 215);">Actions</th>
+                    <th>#</th>
+                    <th>ID</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Phone</th>
+                    <th>Email</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
-            <tbody id="userTable" style="color: #1a1a1a;">
-                <!-- Dynamic content from localStorage -->
+            <tbody id="userTable">
+                <!-- Populated by JS -->
             </tbody>
         </table>
     </div>
+</div>
+
+<!-- View Bookings Modal -->
+<div class="modal fade" id="viewBookingsModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content" style="color:black;">
+      <div class="modal-header">
+        <button class="close" data-dismiss="modal">×</button>
+        <h4>Booking Details</h4>
+      </div>
+      <div class="modal-body" id="bookingsModalBody">
+        <!-- Populated by JS -->
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- Delete Modal -->
@@ -89,7 +98,7 @@
     <div class="modal-content" style="color:black;">
       <div class="modal-header">
         <button class="close" data-dismiss="modal">×</button>
-        <h3>Delete Confirmation</h3>
+        <h4>Delete Confirmation</h4>
       </div>
       <div class="modal-body">
         <p>Are you sure you want to delete this user?</p>
@@ -108,7 +117,10 @@
     &copy; Airline-X. All rights reserved.
 </footer>
 
-<!-- JS for Users Table -->
+<!-- Scripts -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
 <script>
 let deleteIndex = -1;
 
@@ -127,8 +139,13 @@ function loadUsers() {
                 <td>${user.phone}</td>
                 <td>${user.email}</td>
                 <td>
-                    <a href="#"><i class="fa fa-pencil"></i></a>
-                    <a href="#" data-toggle="modal" data-target="#myModal" onclick="setDeleteIndex(${index})"><i class="fa fa-trash-o"></i></a>
+                    <a href="#" onclick="viewBookings('${user.id}')" data-toggle="modal" data-target="#viewBookingsModal" title="View Bookings">
+                        <i class="fa fa-eye"></i>
+                    </a>
+                    &nbsp;
+                    <a href="#" data-toggle="modal" data-target="#myModal" onclick="setDeleteIndex(${index})" title="Delete User">
+                        <i class="fa fa-trash-o"></i>
+                    </a>
                 </td>
             </tr>
         `;
@@ -152,6 +169,24 @@ function addUser() {
     }
 }
 
+function viewBookings(userId) {
+    const bookings = JSON.parse(localStorage.getItem("bookings")) || [];
+    const userBookings = bookings.filter(b => b.id == userId);
+    const modalBody = document.getElementById("bookingsModalBody");
+
+    modalBody.innerHTML = "";
+
+    if (userBookings.length === 0) {
+        modalBody.innerHTML = "<p>No bookings found for this user.</p>";
+    } else {
+        userBookings.forEach((booking, i) => {
+            modalBody.innerHTML += `
+                <p><strong>${i + 1}.</strong> ${booking.name} - ${booking.flightNo} (${booking.from} → ${booking.to}) on ${booking.date} [${booking.flightClass}]</p>
+            `;
+        });
+    }
+}
+
 function setDeleteIndex(index) {
     deleteIndex = index;
 }
@@ -167,14 +202,6 @@ document.getElementById("confirmDeleteBtn").addEventListener("click", () => {
 });
 
 document.addEventListener("DOMContentLoaded", loadUsers);
-</script>
-
-<!-- Navbar toggle handlers -->
-<script type="text/javascript">
-    $("#m1").click({param1:"#sub1",param2:"#sub2",param3:"#sub3",param4:"#sub4"}, navbar_movment);
-    $("#m2").click({param1:"#sub2",param2:"#sub1",param3:"#sub3",param4:"#sub4"}, navbar_movment);
-    $("#m3").click({param1:"#sub3",param2:"#sub1",param3:"#sub2",param4:"#sub4"}, navbar_movment);
-    $("#m4").click({param1:"#sub4",param2:"#sub1",param3:"#sub2",param4:"#sub3"}, navbar_movment);
 </script>
 
 </body>
