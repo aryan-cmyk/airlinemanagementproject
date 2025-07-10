@@ -1,0 +1,148 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Manage Flights</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="{% static 'trial.css' %}">
+</head>
+
+<body style="background-color: #1a1a1a; color: white;">
+
+<!-- Navbar -->
+<nav class="navbar navbar-inverse" style="margin:0; border-radius:0;">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="{% url 'home' %}">Airline-X</a>
+    </div>
+    <ul class="nav navbar-nav navbar-right">
+      <li><a href="#"><span class="glyphicon glyphicon-user"></span> Admin</a></li>
+      <li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Sidebar -->
+<div class="container-fluid" style="margin:0; padding:0;">
+  <div style="width:20%; float:left; background:#222; height:100vh;">
+    <ul class="nav nav-pills nav-stacked" style="margin-top:1rem;">
+      <li><a href="{% url 'home' %}">Home</a></li>
+      <li><a href="{% url 'user' %}">Users</a></li>
+      <li><a href="{% url 'newflight' %}">Add Flight</a></li>
+      <li><a href="{% url 'manageflights' %}" style="color:white;">Manage Flights</a></li>
+      <li><a href="{% url 'newairbus' %}">Manage Airbus</a></li>
+      <li><a href="{% url 'accounts' %}">Accounts</a></li>
+    </ul>
+  </div>
+
+  <!-- Main Content -->
+  <div style="width:80%; float:right; padding:2rem;">
+    <h2>Manage Flights</h2>
+    <button class="btn btn-primary">
+      <a href="{% url 'newflight' %}" style="color: white"><i class="fa fa-plus"></i> Add Flight</a>
+    </button>
+    <br><br>
+
+    <table class="table table-striped table-hover">
+      <thead>
+        <tr>
+          <th style="color:white;">#</th>
+          <th style="color:white;">Flight No</th>
+          <th style="color:white;">From</th>
+          <th style="color:white;">To</th>
+          <th style="color:white;">Departure Date</th>
+          <th style="color:white;">Time</th>
+          <th style="color:white;">Journey Hrs</th>
+          <th style="color:white;">First</th>
+          <th style="color:white;">Business</th>
+          <th style="color:white;">Economy</th>
+          <th style="color:white;">Actions</th>
+        </tr>
+      </thead>
+      <tbody id="flightTable">
+        <!-- Dynamic flight rows from localStorage -->
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Delete Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content" style="color:black;">
+      <div class="modal-header">
+        <button class="close" data-dismiss="modal">×</button>
+        <h3>Delete Confirmation</h3>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to delete the Flight?<br>This cannot be undone.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <button class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  let deleteIndex = -1;
+
+  document.addEventListener("DOMContentLoaded", function () {
+    const flights = JSON.parse(localStorage.getItem("flights")) || [];
+    const flightTable = document.getElementById("flightTable");
+    flightTable.innerHTML = "";
+
+    flights.forEach((flight, index) => {
+      const row = `
+        <tr>
+          <td>${index + 1}</td>
+          <td>${flight.flightNo}</td>
+          <td>${flight.from}</td>
+          <td>${flight.to}</td>
+          <td>${flight.departureDate}</td>
+          <td>${flight.departureTime}</td>
+          <td>${flight.journeyHours}</td>
+          <td>${formatClass(flight.first)}</td>
+          <td>${formatClass(flight.business)}</td>
+          <td>${formatClass(flight.economy)}</td>
+          <td>
+            <a href="#" onclick="editFlight(${index})"><i class="fa fa-pencil"></i></a>
+            <a href="#" data-toggle="modal" data-target="#myModal" onclick="setDeleteIndex(${index})"><i class="fa fa-trash-o"></i></a>
+          </td>
+        </tr>
+      `;
+      flightTable.innerHTML += row;
+    });
+  });
+
+  function formatClass(cls) {
+    if (!cls) return "N/A";
+    return `Seats: ${cls.seats}<br>Price: ₹${cls.price}<br>Features: ${cls.features || '-'}`;
+  }
+
+  function setDeleteIndex(index) {
+    deleteIndex = index;
+  }
+
+  document.getElementById("confirmDeleteBtn").addEventListener("click", function () {
+    if (deleteIndex !== -1) {
+      let flights = JSON.parse(localStorage.getItem("flights")) || [];
+      flights.splice(deleteIndex, 1);
+      localStorage.setItem("flights", JSON.stringify(flights));
+      location.reload();
+    }
+  });
+
+  function editFlight(index) {
+    alert("Edit functionality can be implemented here.");
+  }
+</script>
+</body>
+</html>

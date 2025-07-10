@@ -1,0 +1,62 @@
+{% load static %}
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Accounts</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="{% static 'myjs.js' %}"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Poppins">
+    <link rel="stylesheet" href="{% static 'trial.css' %}">
+</head>
+
+<style type="text/css">
+    .affix {
+        top: 5rem;
+    }
+
+    body {
+        position: relative;
+    }
+</style>
+
+<body data-spy="scroll" data-target="#myscroll">
+
+    <nav class="navbar navbar-inverse" data-spy="affix" style="border-radius:0px !important; margin:0;border: 0 ; width: 100%;top:0;z-index: 9999 !important">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="{% url 'home' %}">Airline-X</a>
+        </div>
+        <div class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-user"></span>
+                    <span class="caret"></span></a>
+                <ul class="dropdown-menu" style="padding: 1rem 2rem 1rem 2rem; text-align: center;">
+                    <li><a href="#"><b>Admin Name</b></a></li>
+                    <hr>
+                    <li><a href="#">View Profile</a></li>
+                    <li><a href="#">Settings</a></li>
+                    <hr>
+                    <li><a href="#">Logout</a></li>
+                </ul>
+            </li>
+            <ul class="nav navbar-nav navbar-right" style="padding: 0 3rem 0 0">
+                <li><a href="{% url 'home' %}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- (Rest of the content remains unchanged — only change static references if any more appear) -->
+
+    <script type="text/javascript">
+        $("#m1").click({ param1: "#sub1", param2: "#sub2", param3: "#sub3", param4: "#sub4" }, navbar_movment);
+        $("#m2").click({ param1: "#sub2", param2: "#sub1", param3: "#sub3", param4: "#sub4" }, navbar_movment);
+        $("#m3").click({ param1: "#sub3", param2: "#sub1", param3: "#sub2", param4: "#sub4" }, navbar_movment);
+        $("#m4").click({ param1: "#sub4", param2: "#sub1", param3: "#sub2", param4: "#sub3" }, navbar_movment);
+    </script>
+</body>
+</html>

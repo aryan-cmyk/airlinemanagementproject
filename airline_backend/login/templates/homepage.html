@@ -1,0 +1,136 @@
+{% load static %}
+<!DOCTYPE HTML>
+<html>
+<head>
+  <title>Homepage</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap & jQuery -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+  <!-- Font Awesome & Custom CSS -->
+  <script src="{% static 'script.js' %}"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="{% static 'trial.css' %}">
+</head>
+
+<style type="text/css">
+  .affix { top: 5rem; }
+  body { position: relative; }
+  label { color: rgb(75, 28, 28); }
+</style>
+
+<body data-spy="scroll" data-target="#myscroll">
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-inverse" data-spy="affix" style="border-radius:0; margin:0; border: 0; width: 100%; top:0; z-index: 9999 !important">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="{% url 'home' %}">Airline-X</a>
+    </div>
+    <div class="nav navbar-nav navbar-right">
+      <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-user"></span> <span class="caret"></span></a>
+        <ul class="dropdown-menu" style="padding: 1rem 2rem; text-align: center;">
+          <li><a href="#"><b>{{ request.user.username }}</b></a></li>
+          <hr>
+          <li><a href="#">View Profile</a></li>
+          <li><a href="#">Settings</a></li>
+          <hr>
+          <li><a href="{% url 'logout' %}">Logout</a></li>
+        </ul>
+      </li>
+      <ul class="nav navbar-nav navbar-right" style="padding: 0 3rem 0 0">
+        <li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Sidebar -->
+  <div class="container" data-spy="affix" style="margin: 0; bottom: 0; float: left; top:5rem; width: 20%; height: 100%; background-color: #222222">
+    <ul class="nav nav-pills nav-stacked">
+      <li>
+        <a href="#">Dashboard</a>
+        <ul style="padding: 0">
+          <div class="list-group">
+            <li><a href="{% url 'home' %}" class="list-group-item">Home</a></li>
+            <li><a href="{% url 'user' %}" class="list-group-item">Users</a></li>
+          </div>
+        </ul>
+      </li>
+
+      <li><a href="#" class="dropdown-toggle" data-target="#flightsub">Flight Schedule</a>
+        <ul id="flightsub" style="padding: 0; display: none;">
+          <div class="list-group">
+            <a href="{% url 'newflight' %}" class="list-group-item">Add new Flight</a>
+            <a href="{% url 'manageflights' %}" class="list-group-item">Manage flights</a>
+          </div>
+        </ul>
+      </li>
+
+      <li><a href="#" class="dropdown-toggle" data-target="#airbussub">Airbus</a>
+        <ul id="airbussub" style="padding: 0; display: none;">
+          <div class="list-group">
+            <a href="{% url 'newairbus' %}" class="list-group-item">Add new airbus</a>
+            <a href="{% url 'newairbus' %}" class="list-group-item">Manage Airbus</a>
+          </div>
+        </ul>
+      </li>
+
+      <li><a href="#" class="dropdown-toggle" data-target="#accountsub">Accounts</a>
+        <ul id="accountsub" style="padding: 0; display: none;">
+          <div class="list-group">
+            <a href="{% url 'accounts' %}" class="list-group-item">Create new account</a>
+            <a href="{% url 'passwordreset' %}" class="list-group-item">Password Reset</a>
+          </div>
+        </ul>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Main Content Area -->
+  <div class="background-wrapper" style="background-image: url({% static 'backgroundwrap.jpg' %}); width: 80%; height: 100%;  float: right;">
+    <div id="myscroll" class="container" style="margin-left: 10; margin-top: 5rem; float: right; width: 100%; padding: 0 5rem 5rem 5rem;">
+      <header>
+        <h1>Welcome, {{ request.user.get_full_name|default:request.user.username }}</h1>
+        <hr>
+      </header>
+      <div style="width: 100%">
+        <div class="panel-group">
+          <div class="panel panel-default panel-transparent">
+            <div class="panel-heading">
+              <legend style="text-align: center; width: 100%">Profile Information</legend>
+            </div>
+            <div class="panel-body" style="width: 100%">
+              <header>
+                <br><h3>Username: {{ request.user.username }}</h3>
+                <br><h3>Email: {{ request.user.email }}</h3>
+                <br><h3>Date Joined: {{ request.user.date_joined }}</h3>
+                {% if request.user.userprofile %}
+                  <br><h3>Title/Role: {{ request.user.userprofile.title|capfirst }}</h3>
+                {% else %}
+                  <br><h3>Title/Role: Not available</h3>
+                {% endif %}
+              </header>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+
+<script>
+  $(document).ready(function () {
+    $('.dropdown-toggle').click(function (e) {
+      e.preventDefault();
+      var target = $(this).data('target');
+      $(target).slideToggle();
+    });
+  });
+</script>
+
+</html>

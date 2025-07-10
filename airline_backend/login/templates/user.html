@@ -1,0 +1,181 @@
+{% load static %}
+<!doctype html>
+<html>
+<head>
+    <title>Users</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap & FontAwesome -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!-- jQuery + Bootstrap JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <!-- Fonts & Custom CSS -->
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Poppins">
+    <link rel="stylesheet" href="{% static 'trial.css' %}">
+    <script src="{% static 'myjs.js' %}"></script>
+</head>
+
+<body style="background-color: #1a1a1a; color: white;">
+
+<!-- Navbar -->
+<nav class="navbar navbar-inverse" style="margin-bottom: 0; border-radius: 0;">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="{% url 'home' %}">Airline-X</a>
+        </div>
+        <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-user"></span> <span class="caret"></span></a>
+                <ul class="dropdown-menu" style="padding: 1rem 2rem; text-align: center;">
+                    <li><a href="#"><b>Admin Name</b></a></li>
+                    <hr>
+                    <li><a href="#">View Profile</a></li>
+                    <li><a href="#">Settings</a></li>
+                    <hr>
+                    <li><a href="{% url 'logout' %}">Logout</a></li>
+                </ul>
+            </li>
+            <li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+        </ul>
+    </div>
+</nav>
+
+<!-- Sidebar -->
+<div class="container-fluid" style="margin:0; padding:0;">
+    <div style="width:20%; float:left; background:#222; height:100vh;">
+        <ul class="nav nav-pills nav-stacked" style="margin-top:1rem;">
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'user' %}">Users</a></li>
+            <li><a href="{% url 'newflight' %}">Add Flight</a></li>
+            <li><a href="{% url 'manageflights' %}">Manage Flights</a></li>
+            <li><a href="{% url 'newairbus' %}">Manage Airbus</a></li>
+            <li><a href="{% url 'accounts' %}">Accounts</a></li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div style="width:80%; float:right; padding:2rem;">
+        <h2>Users</h2>
+        <button class="btn btn-primary" onclick="addUser()"><i class="fa fa-plus"></i> New User</button>
+        <br><br>
+
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th style="color: rgb(237, 231, 231);">#</th>
+                    <th style="color: rgb(223, 217, 217);">ID</th>
+                    <th style="color: rgb(243, 234, 234);">First Name</th>
+                    <th style="color: rgb(229, 218, 218);">Last Name</th>
+                    <th style="color: rgb(228, 219, 219);">Phone</th>
+                    <th style="color: rgb(234, 227, 227);">Email</th>
+                    <th style="color: rgb(222, 215, 215);">Actions</th>
+                </tr>
+            </thead>
+            <tbody id="userTable" style="color: #1a1a1a;">
+                <!-- Dynamic content from localStorage -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Delete Modal -->
+<div class="modal fade" id="myModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content" style="color:black;">
+      <div class="modal-header">
+        <button class="close" data-dismiss="modal">×</button>
+        <h3>Delete Confirmation</h3>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to delete this user?</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <button class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="container-fluid text-center" style="position: fixed; bottom: 0; width: 100%; color: white;">
+    <hr>
+    &copy; Airline-X. All rights reserved.
+</footer>
+
+<!-- JS for Users Table -->
+<script>
+let deleteIndex = -1;
+
+function loadUsers() {
+    let users = JSON.parse(localStorage.getItem("users")) || [];
+    const tbody = document.getElementById("userTable");
+    tbody.innerHTML = "";
+
+    users.forEach((user, index) => {
+        tbody.innerHTML += `
+            <tr>
+                <td>${index + 1}</td>
+                <td>${user.id}</td>
+                <td>${user.firstName}</td>
+                <td>${user.lastName}</td>
+                <td>${user.phone}</td>
+                <td>${user.email}</td>
+                <td>
+                    <a href="#"><i class="fa fa-pencil"></i></a>
+                    <a href="#" data-toggle="modal" data-target="#myModal" onclick="setDeleteIndex(${index})"><i class="fa fa-trash-o"></i></a>
+                </td>
+            </tr>
+        `;
+    });
+}
+
+function addUser() {
+    let id = prompt("Enter User ID:");
+    let firstName = prompt("Enter First Name:");
+    let lastName = prompt("Enter Last Name:");
+    let phone = prompt("Enter Phone Number:");
+    let email = prompt("Enter Email:");
+
+    if (id && firstName && lastName && phone && email) {
+        let users = JSON.parse(localStorage.getItem("users")) || [];
+        users.push({ id, firstName, lastName, phone, email });
+        localStorage.setItem("users", JSON.stringify(users));
+        loadUsers();
+    } else {
+        alert("All fields are required!");
+    }
+}
+
+function setDeleteIndex(index) {
+    deleteIndex = index;
+}
+
+document.getElementById("confirmDeleteBtn").addEventListener("click", () => {
+    if (deleteIndex !== -1) {
+        let users = JSON.parse(localStorage.getItem("users")) || [];
+        users.splice(deleteIndex, 1);
+        localStorage.setItem("users", JSON.stringify(users));
+        loadUsers();
+        $('#myModal').modal('hide');
+    }
+});
+
+document.addEventListener("DOMContentLoaded", loadUsers);
+</script>
+
+<!-- Navbar toggle handlers -->
+<script type="text/javascript">
+    $("#m1").click({param1:"#sub1",param2:"#sub2",param3:"#sub3",param4:"#sub4"}, navbar_movment);
+    $("#m2").click({param1:"#sub2",param2:"#sub1",param3:"#sub3",param4:"#sub4"}, navbar_movment);
+    $("#m3").click({param1:"#sub3",param2:"#sub1",param3:"#sub2",param4:"#sub4"}, navbar_movment);
+    $("#m4").click({param1:"#sub4",param2:"#sub1",param3:"#sub2",param4:"#sub3"}, navbar_movment);
+</script>
+
+</body>
+</html>

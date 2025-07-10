@@ -1,32 +1,36 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
     <title>Book Flight</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- External CDN links stay the same -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Poppins">
-    <link rel="stylesheet" href="trial.css">
+
+    <!-- Replace local file reference with Django static -->
+    <link rel="stylesheet" href="{% static 'trial.css' %}">
 </head>
 
 <body style="background-color: #1a1a1a; color: white;">
-    <!-- Navbar -->
+
     <nav class="navbar navbar-inverse" style="margin: 0; border-radius: 0;">
         <div class="container-fluid">
             <div class="navbar-header">
                 <a class="navbar-brand" href="#">Airline-X</a>
             </div>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="mybookings.html"><i class="fa fa-list"></i> My Bookings</a></li>
-                <li><a href="#"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+                <li><a href="{% url 'mybookings' %}"><i class="fa fa-list"></i> My Bookings</a></li>
+                <li><a href="{% url 'login' %}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
             </ul>
         </div>
     </nav>
 
-    <!-- Booking Form -->
     <div class="container" style="margin-top: 40px;">
         <h2>Book a Flight</h2>
         <hr>

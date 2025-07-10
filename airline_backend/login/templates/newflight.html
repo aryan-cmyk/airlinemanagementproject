@@ -1,0 +1,160 @@
+{% load static %}
+<!DOCTYPE HTML>
+<html>
+<head>
+  <title>New Flight</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Poppins">
+  <link rel="stylesheet" href="{% static 'trial.css' %}">
+</head>
+
+<body style="background-color:#1a1a1a; color:white;">
+  <!-- Navbar -->
+  <nav class="navbar navbar-inverse" style="margin:0; border-radius:0;">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="{% url 'home' %}">Airline-X</a>
+      </div>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="#"><span class="glyphicon glyphicon-user"></span> Admin</a></li>
+        <li><a href="{% url 'home' %}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Sidebar -->
+  <div class="container-fluid" style="margin:0; padding:0;">
+    <div style="width:20%; float:left; background:#222; height:100vh;">
+      <ul class="nav nav-pills nav-stacked" style="margin-top:1rem;">
+        <li><a href="{% url 'home' %}">Home</a></li>
+        <li><a href="{% url 'user' %}">Users</a></li>
+        <li><a href="{% url 'newflight' %}" style="color:white;">Add Flight</a></li>
+        <li><a href="{% url 'manageflights' %}">Manage Flights</a></li>
+        <li><a href="{% url 'newairbus' %}">Manage Airbus</a></li>
+        <li><a href="{% url 'accounts' %}">Accounts</a></li>
+      </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div style="width:80%; float:right; padding:2rem;">
+      <h2>New Flight</h2>
+      <form id="flightForm">
+        <div class="form-group">
+          <label>Flight No</label>
+          <input type="number" class="form-control" id="flightNo" required>
+        </div>
+        <div class="form-group">
+          <label>Plane No</label>
+          <select id="planeNo" class="form-control">
+            <option>100</option>
+            <option>200</option>
+            <option>300</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>From</label>
+          <input type="text" class="form-control" id="from" required>
+        </div>
+        <div class="form-group">
+          <label>To</label>
+          <input type="text" class="form-control" id="to" required>
+        </div>
+        <div class="form-group">
+          <label>Departure Date</label>
+          <input type="date" class="form-control" id="departureDate" required>
+        </div>
+        <div class="form-group">
+          <label>Departure Time</label>
+          <input type="time" class="form-control" id="departureTime" required>
+        </div>
+        <div class="form-group">
+          <label>Journey Hours</label>
+          <input type="number" class="form-control" id="journeyHours" min="1" required>
+        </div>
+        <div class="form-group">
+          <label>Intervals</label>
+          <input type="number" class="form-control" id="intervals" min="0">
+        </div>
+
+        <!-- Features Panel -->
+        <div class="panel panel-default">
+          <div class="panel-heading"><b>Seat Class Information</b></div>
+          <div class="panel-body">
+            <div class="row">
+              <div class="col-sm-4">
+                <h4 style=color:black>First Class</h4>
+                <input type="number" class="form-control" id="firstSeats" placeholder="Seats">
+                <input type="number" class="form-control" id="firstPrice" placeholder="Price">
+                <input type="text" class="form-control" id="firstFeatures" placeholder="Features">
+              </div>
+              <div class="col-sm-4">
+                <h4 style=color:#1a1a1a>Business Class</h4>
+                <input type="number" class="form-control" id="businessSeats" placeholder="Seats">
+                <input type="number" class="form-control" id="businessPrice" placeholder="Price">
+                <input type="text" class="form-control" id="businessFeatures" placeholder="Features">
+              </div>
+              <div class="col-sm-4">
+                <h4 style=color:#1a1a1a>Economy Class</h4>
+                <input type="number" class="form-control" id="economySeats" placeholder="Seats">
+                <input type="number" class="form-control" id="economyPrice" placeholder="Price">
+                <input type="text" class="form-control" id="economyFeatures" placeholder="Features">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary" id="addFlightBtn">
+          <i class="fa fa-plus"></i> Add Flight
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- JS: Save to localStorage -->
+  <script>
+    document.getElementById("flightForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const newFlight = {
+        flightNo: document.getElementById("flightNo").value,
+        planeNo: document.getElementById("planeNo").value,
+        from: document.getElementById("from").value,
+        to: document.getElementById("to").value,
+        departureDate: document.getElementById("departureDate").value,
+        departureTime: document.getElementById("departureTime").value,
+        journeyHours: document.getElementById("journeyHours").value,
+        intervals: document.getElementById("intervals").value,
+        seats: {
+          first: {
+            count: document.getElementById("firstSeats").value,
+            price: document.getElementById("firstPrice").value,
+            features: document.getElementById("firstFeatures").value
+          },
+          business: {
+            count: document.getElementById("businessSeats").value,
+            price: document.getElementById("businessPrice").value,
+            features: document.getElementById("businessFeatures").value
+          },
+          economy: {
+            count: document.getElementById("economySeats").value,
+            price: document.getElementById("economyPrice").value,
+            features: document.getElementById("economyFeatures").value
+          }
+        }
+      };
+
+      let flights = JSON.parse(localStorage.getItem("flights")) || [];
+      flights.push(newFlight);
+      localStorage.setItem("flights", JSON.stringify(flights));
+      alert("Flight added successfully!");
+      window.location.href = "{% url 'manageflights' %}";
+    });
+  </script>
+</body>
+</html>
